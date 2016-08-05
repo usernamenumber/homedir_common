@@ -127,3 +127,4 @@ fi
 export EDITOR=vim
 export ANDROID_HOME=/home/unn/Android/Sdk
 alias open=xdg-open
+[ -r /home/local/ANT/smibrd/.byobu/prompt ] && . /home/local/ANT/smibrd/.byobu/prompt   #byobu-prompt#
