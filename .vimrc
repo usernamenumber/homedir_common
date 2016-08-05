@@ -42,6 +42,7 @@ Plugin 'majutsushi/tagbar'
 "Colors!!!
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
+Plugin 'tpope/vim-vividchalk'
 
 call vundle#end()
 
