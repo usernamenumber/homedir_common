@@ -128,3 +128,14 @@ export EDITOR=vim
 export ANDROID_HOME=/home/unn/Android/Sdk
 alias open=xdg-open
 [ -r /home/local/ANT/smibrd/.byobu/prompt ] && . /home/local/ANT/smibrd/.byobu/prompt   #byobu-prompt#
+
+# http://superuser.com/questions/288320/whats-like-osxs-pbcopy-for-linux
+if which xclip &> /dev/null
+then
+    alias pbcopy='xclip -selection clipboard'
+    alias pbpaste='xclip -selection clipboard -o'
+elif which xsel &> /dev/null
+then
+    alias pbcopy='xsel --clipboard --input'
+    alias pbpaste='xsel --clipboard --output'
+fi
