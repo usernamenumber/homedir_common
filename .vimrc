@@ -69,7 +69,7 @@ set guifont=Monaco:h14
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
 "I don't like swap files
-set noswapfile
+"set noswapfile
 
 "turn on numbering
 set nu
@@ -143,3 +143,11 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" (not) word wrapping
+:set wrap
+:set linebreak
+:set nolist  " list disables linebreak
+
+" CAPS to esc
+"au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+"au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
