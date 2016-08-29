@@ -151,3 +151,12 @@ nnoremap <C-H> <C-W><C-H>
 " CAPS to esc
 "au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 "au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
+
+" indentation and line wrapping defaults
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set wrap
+set linebreak
+set nolist
+
