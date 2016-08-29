@@ -139,3 +139,8 @@ then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
 fi
+
+# Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
+xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+
+[ -f ~/.bashrc_local ] && source ~/.bashrc_local
