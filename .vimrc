@@ -1,4 +1,10 @@
+" $ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set mouse=a
+
+" https://www.youtube.com/watch?v=XA2WjJbmmoM
+set wildmenu
+set path+=**
+command! MakeTags !ctags -R .
 
 "vundle
 set nocompatible
@@ -29,7 +35,7 @@ Plugin 'scrooloose/syntastic'
 
 "auto-completion stuff
 "Plugin 'klen/python-mode'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'klen/rope-vim'
 "Plugin 'davidhalter/jedi-vim'
 Plugin 'ervandew/supertab'
