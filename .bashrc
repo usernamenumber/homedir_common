@@ -125,19 +125,22 @@ if [ -x /usr/bin/mint-fortune ]; then
 fi
 
 export EDITOR=vim
-export ANDROID_HOME=/home/unn/Android/Sdk
+#export ANDROID_HOME=$HOME/Android/Sdk
 alias open=xdg-open
 [ -r /home/local/ANT/smibrd/.byobu/prompt ] && . /home/local/ANT/smibrd/.byobu/prompt   #byobu-prompt#
 
 # http://superuser.com/questions/288320/whats-like-osxs-pbcopy-for-linux
-if which xclip &> /dev/null
+if ! which pbcopy
 then
-    alias pbcopy='xclip -selection clipboard'
-    alias pbpaste='xclip -selection clipboard -o'
-elif which xsel &> /dev/null
-then
-    alias pbcopy='xsel --clipboard --input'
-    alias pbpaste='xsel --clipboard --output'
+    if which xclip &> /dev/null
+    then
+        alias pbcopy='xclip -selection clipboard'
+        alias pbpaste='xclip -selection clipboard -o'
+    elif which xsel &> /dev/null
+    then
+        alias pbcopy='xsel --clipboard --input'
+        alias pbpaste='xsel --clipboard --output'
+    fi
 fi
 
 if which xmodmap &>/dev/null
@@ -149,3 +152,5 @@ then
 fi
 
 [ -f ~/.bashrc_local ] && source ~/.bashrc_local
+
+[ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
