@@ -1,5 +1,7 @@
 " $ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set mouse=a
+set paste
+set ai
 
 " https://www.youtube.com/watch?v=XA2WjJbmmoM
 set wildmenu
@@ -31,7 +33,7 @@ Plugin 'nelstrom/vim-markdown-preview'
 Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/Pydiction'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 
 "auto-completion stuff
 "Plugin 'klen/python-mode'
@@ -100,6 +102,7 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 "------------Start Python PEP 8 stuff----------------
 " Number of spaces that a pre-existing tab is equal to.
 au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
+au BufRead,BufNewFile *md set tabstop=2
 
 "spaces for indents
 au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
