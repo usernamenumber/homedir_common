@@ -140,7 +140,12 @@ then
     alias pbpaste='xsel --clipboard --output'
 fi
 
-# Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
-xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+if which xmodmap &>/dev/null
+then
+    # Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
+    xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+    # Right-click key = Ctrl
+    xmodmap -e 'keycode 0xff67 = Control_L'
+fi
 
 [ -f ~/.bashrc_local ] && source ~/.bashrc_local
