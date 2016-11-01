@@ -19,6 +19,7 @@ Plugin 'VundleVim/Vundle.vim'
 "git interface
 Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+set laststatus=2
 "filesystem
 Plugin 'scrooloose/nerdtree'
 Plugin 'jistr/vim-nerdtree-tabs'
@@ -33,10 +34,17 @@ Plugin 'nelstrom/vim-markdown-preview'
 Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/Pydiction'
 Plugin 'vim-scripts/indentpython.vim'
-"Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
+let g:syntastic_check_on_open=1
+let g:syntastic_python_checkers=['flake8','pylint']
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 "auto-completion stuff
-"Plugin 'klen/python-mode'
+Plugin 'klen/python-mode'
 "Plugin 'Valloric/YouCompleteMe'
 Plugin 'klen/rope-vim'
 "Plugin 'davidhalter/jedi-vim'
