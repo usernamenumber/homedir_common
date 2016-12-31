@@ -125,12 +125,15 @@ if [ -x /usr/bin/mint-fortune ]; then
 fi
 
 export EDITOR=vim
-#export ANDROID_HOME=$HOME/Android/Sdk
-alias open=xdg-open
+export ANDROID_HOME=$HOME/Android
+if which xdg-open &>/dev/null
+then
+    alias open=xdg-open
+fi
 [ -r /home/local/ANT/smibrd/.byobu/prompt ] && . /home/local/ANT/smibrd/.byobu/prompt   #byobu-prompt#
 
 # http://superuser.com/questions/288320/whats-like-osxs-pbcopy-for-linux
-if ! which pbcopy
+if ! which pbcopy &> /dev/null
 then
     if which xclip &> /dev/null
     then
@@ -154,3 +157,6 @@ fi
 [ -f ~/.bashrc_local ] && source ~/.bashrc_local
 
 [ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
+
+bind '"\e[1;5D" backward-word' 
+bind '"\e[1;5C" forward-word'
