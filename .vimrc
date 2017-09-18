@@ -177,3 +177,9 @@ set wrap
 set linebreak
 set nolist
 
+" Normal copy/paste in gvim
+vmap <C-c> "+yi
+vmap <C-x> "+c
+vmap <C-v> c<ESC>"+p
+imap <C-v> <C-r><C-o>+
+
