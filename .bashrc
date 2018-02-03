@@ -38,7 +38,9 @@ function git_branch() {
      [ -n "$BRANCH" ] && echo "$BRANCH"
 }
 
-export PROMPT_COMMAND="xmodmap &>/dev/null || source /usr/bin/byobu-reconnect-sockets; $PROMPT_COMMAND"
+if [ "$(uname)" == "Linux" ]; then
+    export PROMPT_COMMAND="xmodmap &>/dev/null || source /usr/bin/byobu-reconnect-sockets; $PROMPT_COMMAND"
+fi
 [ -z "$DATE_COLOR" ] && DATE_COLOR=$WHITE
 [ -z "$HOST_COLOR" ] && HOST_COLOR=$LIGHT_GRAY
 [ -z "$PATH_COLOR" ] && PATH_COLOR=$LIGHT_BLUE
