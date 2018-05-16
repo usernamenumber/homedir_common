@@ -39,14 +39,17 @@ let g:syntastic_check_on_open=1
 let g:syntastic_python_checkers=['flake8','pylint']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
+let b:syntastic_mode = "passive"
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+
 "auto-completion stuff
-Plugin 'klen/python-mode'
+"Plugin 'klen/python-mode'
+"Plugin 'davidhalter/jedi-vim'
 "Plugin 'Valloric/YouCompleteMe'
-Plugin 'klen/rope-vim'
+"Plugin 'klen/rope-vim'
 "Plugin 'davidhalter/jedi-vim'
 Plugin 'ervandew/supertab'
 ""code folding
@@ -147,6 +150,8 @@ set backspace=indent,eol,start
 
 "Folding based on indentation:
 autocmd FileType python set foldmethod=indent
+"don't fold everything by default
+set foldlevelstart=1
 "use space to open folds
 nnoremap <space> za 
 "----------Stop python PEP 8 stuff--------------
