@@ -25,27 +25,32 @@ LIGHT_PURPLE='\033[1;35m'
 LIGHT_CYAN='\033[1;36m'
 WHITE='\033[1;37m'
 
+git_branch() {
+     git branch 2>/dev/null | grep -Po '(?<=\* ).*' 
+}
 
-unset PROMPT_COLOR
-unset DATE_COLOR
-unset PATH_COLOR
-unset HOST_COLOR
-[ -f ~/.bashrc-local-pre ] && source ~/.bashrc-local-pre
+color_prompt() {
+    unset PROMPT_COLOR
+    unset BRANCH_COLOR
+    unset DATE_COLOR
+    unset PATH_COLOR
+    unset HOST_COLOR
+    [ -f ~/.bashrc-local-pre ] && source ~/.bashrc-local-pre
 
-function git_branch() {
-     # Credit: https://coderwall.com/p/fasnya/add-git-branch-name-to-bash-prompt
-     BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ on \1/')
-     [ -n "$BRANCH" ] && echo "$BRANCH"
+    [ -z "$DATE_COLOR" ] && DATE_COLOR=$WHITE
+    [ -z "$HOST_COLOR" ] && HOST_COLOR=$LIGHT_GRAY
+    [ -z "$PATH_COLOR" ] && PATH_COLOR=$LIGHT_BLUE
+    [ -z "$PROMPT_COLOR" ] && PROMPT_COLOR=$YELLOW
+    [ -z "$MASTER_COLOR" ] && MASTER_COLOR=$RED
+    [ -z "$BRANCH_COLOR" ] && BRANCH_COLOR=$PURPLE
+    export PS1="\n${PROMPT_COLOR}[ ${HOST_COLOR}\u@\h ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s} ${PROMPT_COLOR}in ${PATH_COLOR}\w${BRANCH_COLOR}\$(BRANCH=\$(git_branch) ; case \"\$BRANCH\" in  \"\") ;; \"master\") echo \" ${PROMPT_COLOR}on ${MASTER_COLOR}MASTER${PROMPT_COLOR}\" ;; *) echo \" ${PROMPT_COLOR}on ${BRANCH_COLOR}\$BRANCH${PROMPT_COLOR}\" ;; esac) ${PROMPT_COLOR}]\n${PROMPT_COLOR}$ ${NC}"
 }
 
 if [ "$(uname)" == "Linux" ]; then
     export PROMPT_COMMAND="xmodmap &>/dev/null || source /usr/bin/byobu-reconnect-sockets; $PROMPT_COMMAND"
 fi
-[ -z "$DATE_COLOR" ] && DATE_COLOR=$WHITE
-[ -z "$HOST_COLOR" ] && HOST_COLOR=$LIGHT_GRAY
-[ -z "$PATH_COLOR" ] && PATH_COLOR=$LIGHT_BLUE
-[ -z "$PROMPT_COLOR" ] && PROMPT_COLOR=$YELLOW
-export PS1="\n${PROMPT_COLOR}-- ${HOST_COLOR}\u@\h ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s} ${PROMPT_COLOR}in ${PATH_COLOR}\w$(git_branch)\n${PROMPT_COLOR}$ ${NC}"
+
+color_prompt
 
 # User specific aliases and functions
 export LESS="-R"
