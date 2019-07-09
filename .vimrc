@@ -44,6 +44,13 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+" 
+" requires nodejs, yarn
+call plug#begin('~/.vim/plugged')
+"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+"Plug 'neoclide/coc-solargraph', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
 
 "auto-completion stuff
 "Plugin 'klen/python-mode'
@@ -53,7 +60,13 @@ set statusline+=%*
 "Plugin 'davidhalter/jedi-vim'
 Plugin 'ervandew/supertab'
 ""code folding
-Plugin 'tmhedberg/SimpylFold'
+"Plugin 'tmhedberg/SimpylFold'
+"Folding based on indentation:
+"autocmd FileType python set foldmethod=indent
+"don't fold everything by default
+"set foldlevelstart=1
+"use space to open folds
+"nnoremap <space> za 
 
 "object browsing
 Plugin 'majutsushi/tagbar'
@@ -148,12 +161,6 @@ autocmd FileType python set autoindent
 set backspace=indent,eol,start
 
 
-"Folding based on indentation:
-autocmd FileType python set foldmethod=indent
-"don't fold everything by default
-set foldlevelstart=1
-"use space to open folds
-nnoremap <space> za 
 "----------Stop python PEP 8 stuff--------------
 
 "js stuff"
