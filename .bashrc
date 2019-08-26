@@ -48,7 +48,10 @@ git_branch() {
      git branch 2>/dev/null | grep -Po '(?<=\* ).*' 
 }
 
-color_prompt() {
+len() {
+	echo $1 | wc -c
+}
+set_prompt() {
     unset PROMPT_COLOR
     unset BRANCH_COLOR
     unset DATE_COLOR
@@ -62,19 +65,49 @@ color_prompt() {
     [ -z "$PROMPT_COLOR" ] && PROMPT_COLOR=$YELLOW
     [ -z "$MASTER_COLOR" ] && MASTER_COLOR=$RED
     [ -z "$BRANCH_COLOR" ] && BRANCH_COLOR=$PURPLE
-    export PS1="\n${PROMPT_COLOR}[ ${HOST_COLOR}\u@\h ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s} ${PROMPT_COLOR}in ${PATH_COLOR}\w${BRANCH_COLOR}\$(BRANCH=\$(git_branch) ; case \"\$BRANCH\" in  \"\") ;; \"master\") echo \" ${PROMPT_COLOR}on ${MASTER_COLOR}MASTER${PROMPT_COLOR}\" ;; *) echo \" ${PROMPT_COLOR}on ${BRANCH_COLOR}\$BRANCH${PROMPT_COLOR}\" ;; esac) ${PROMPT_COLOR}]\n${PROMPT_COLOR}$ ${NC}"
+
+
+	USER_PART="${HOST_COLOR}\u@\h"
+	DATE_PART=" ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s}"
+    PATH_PART="${PROMPT_COLOR}in ${PATH_COLOR}$($HOME/.local/repos/sysadmisc/shorten_path.py)"
+	BRANCH=$(git_branch)
+	case "$BRANCH" in  
+		"") 
+			BRANCH_PART=""
+		;; 
+		"master") 
+			BRANCH_PART=" ${PROMPT_COLOR}on ${MASTER_COLOR}MASTER${PROMPT_COLOR}" 
+		;; 
+		*) 
+			BRANCH_PART=" ${BRANCH_COLOR}on ${PROMPT_COLOR}on ${BRANCH_COLOR}\$BRANCH${PROMPT_COLOR}"
+		;; 
+	esac 
+
+	PROMPT_LEN=$[ 22 + $(len $USER) + $(len $HOSTNAME) + $(len $DIR) + $(len $BRANCH)]
+	
+    PS1="\n${PROMPT_COLOR}[ "
+	# Omit this stuff for small windows like tmux splits
+	if [ "$COLUMNS" -ge "$PROMPT_LEN" ] ; then
+		PS1="${PS1}${USER_PART}"
+		PS1="${PS1}${DATE_PART}"
+	fi 
+	PS1="${PS1}${PATH_PART}"
+	PS1="${PS1}${BRANCH_PART}"
+	PS1="${PS1}${PROMPT_COLOR} ]\n${PROMPT_COLOR}$ ${NC}"
+	export PS1
 }
+export PROMPT_COMMAND="set_prompt"
 
 if [ "$(uname)" == "Linux" ]; then
     start_ssh_agent
-    export PROMPT_COMMAND="xmodmap &>/dev/null || source /usr/bin/byobu-reconnect-sockets; $PROMPT_COMMAND"
+    #export PROMPT_COMMAND="$PROMPT_COMMAND; xmodmap &>/dev/null || source /usr/bin/byobu-reconnect-sockets; $PROMPT_COMMAND"
     alias pbcopy='xclip -selection clipboard'
     alias pbpaste='xclip -selection clipboard -o'
     alias route="ip route"
     alias netstat="echo 'use \`ss\` you may need different options than '"
 fi
 
-color_prompt
+set_prompt
 
 export LESS="-R"
 export HISTSIZE=100000
@@ -82,7 +115,8 @@ export HISTTIMEFORMAT="%F %T %s%t"
 # Enable history appending instead of overwriting.
 shopt -s histappend
 
-alias v='vim'
+alias route="ip route"
+alias netstat="echo 'use \`ss\` you may need different options than '"
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
@@ -91,8 +125,19 @@ alias more=less
 alias v=vim
 alias g=git
 alias d=docker
+alias y=yarn
+alias yi='yarn install'
+alias yr='yarn run'
+alias yrs='yarn run start'
 alias kcp='kubectl --context=production'
 alias kcs='kubectl --context=staging'
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+alias vpp='vpn prod'
+alias vps='vpn staging'
+alias ezk='docker run --rm -v "$HOME/.aws:/root/.aws:ro" -v "$HOME/.kube:/root/.kube" -v "$(pwd)/service.yml:/usr/src/gem/service.yml:ro" -it ezcater-production.jfrog.io/ezk-gem ezk'
+alias k='kubectl'
+
 
 # Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
 xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
