@@ -69,7 +69,7 @@ set_prompt() {
 
 	USER_PART="${HOST_COLOR}\u@\h"
 	DATE_PART=" ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s}"
-    PATH_PART="${PROMPT_COLOR}in ${PATH_COLOR}$($HOME/.local/repos/sysadmisc/shorten_path.py)"
+        PATH_PART=" ${PROMPT_COLOR}in ${PATH_COLOR}$($HOME/.local/repos/sysadmisc/shorten_path.py)"
 	BRANCH=$(git_branch)
 	case "$BRANCH" in  
 		"") 
@@ -87,7 +87,8 @@ set_prompt() {
 	
     PS1="\n${PROMPT_COLOR}[ "
 	# Omit this stuff for small windows like tmux splits
-	if [ "$COLUMNS" -ge "$PROMPT_LEN" ] ; then
+	if [ ${COLUMNS:-0} -ge $PROMPT_LEN ] ; then
+        #if true ; then
 		PS1="${PS1}${USER_PART}"
 		PS1="${PS1}${DATE_PART}"
 	fi 
@@ -137,10 +138,14 @@ alias vpp='vpn prod'
 alias vps='vpn staging'
 alias ezk='docker run --rm -v "$HOME/.aws:/root/.aws:ro" -v "$HOME/.kube:/root/.kube" -v "$(pwd)/service.yml:/usr/src/gem/service.yml:ro" -it ezcater-production.jfrog.io/ezk-gem ezk'
 alias k='kubectl'
+alias b='bundle'
+alias be='bundle exec'
+alias bi='bundle install'
+alias br='bundle exec rake'
 
 
 # Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
-xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+[ -n "$DISPLAY" ] && xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 
 # Local PATH extensions
 export PATH="$HOME/bin:$PATH"
