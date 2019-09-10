@@ -67,33 +67,35 @@ set_prompt() {
     [ -z "$BRANCH_COLOR" ] && BRANCH_COLOR=$PURPLE
 
 
-	USER_PART="${HOST_COLOR}\u@\h"
-	DATE_PART=" ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s}"
-    PATH_PART="${PROMPT_COLOR}in ${PATH_COLOR}$($HOME/.local/repos/sysadmisc/shorten_path.py)"
+	USER_PART="${HOST_COLOR}\u@\h${PROMPT_COLOR}"
+	DATE_PART="${DATE_COLOR}\D{%s}${PROMPT_COLOR}"
+
+	DIR="$($HOME/.local/repos/sysadmisc/shorten_path.py)"
+    DIR_PART=" ${PATH_COLOR}${DIR}${PROMPT_COLOR}"
 	BRANCH=$(git_branch)
 	case "$BRANCH" in  
 		"") 
 			BRANCH_PART=""
 		;; 
 		"master") 
-			BRANCH_PART=" ${PROMPT_COLOR}on ${MASTER_COLOR}MASTER${PROMPT_COLOR}" 
+			BRANCH_PART=" on ${MASTER_COLOR}MASTER${PROMPT_COLOR}" 
 		;; 
 		*) 
-			BRANCH_PART=" ${BRANCH_COLOR}on ${PROMPT_COLOR}on ${BRANCH_COLOR}\$BRANCH${PROMPT_COLOR}"
+			BRANCH_PART=" on ${BRANCH_COLOR}\$BRANCH${PROMPT_COLOR}"
 		;; 
 	esac 
 
 	PROMPT_LEN=$[ 22 + $(len $USER) + $(len $HOSTNAME) + $(len $DIR) + $(len $BRANCH)]
-	
-    PS1="\n${PROMPT_COLOR}[ "
+    PS1="\n${PROMPT_COLOR}["
 	# Omit this stuff for small windows like tmux splits
 	if [ "$COLUMNS" -ge "$PROMPT_LEN" ] ; then
-		PS1="${PS1}${USER_PART}"
-		PS1="${PS1}${DATE_PART}"
+		PS1="${PS1} ${USER_PART}"
+		PS1="${PS1} at ${DATE_PART}"
+		PS1="${PS1} in"
 	fi 
-	PS1="${PS1}${PATH_PART}"
+	PS1="${PS1}${DIR_PART}"
 	PS1="${PS1}${BRANCH_PART}"
-	PS1="${PS1}${PROMPT_COLOR} ]\n${PROMPT_COLOR}$ ${NC}"
+	PS1="${PS1} ]\n${PROMPT_COLOR}$ ${NC}"
 	export PS1
 }
 export PROMPT_COMMAND="set_prompt"
@@ -117,10 +119,14 @@ shopt -s histappend
 
 alias route="ip route"
 alias netstat="echo 'use \`ss\` you may need different options than '"
+alias c="code -r"
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
-alias np='nano -w PKGBUILD'
+alias b='bundle'
+alias be='bundle exec'
+alias br='bundle exec rake'
+alias brr='bundle exec rake route'
+alias free='free -h'
 alias more=less
 alias v=vim
 alias g=git
@@ -137,6 +143,9 @@ alias vpp='vpn prod'
 alias vps='vpn staging'
 alias ezk='docker run --rm -v "$HOME/.aws:/root/.aws:ro" -v "$HOME/.kube:/root/.kube" -v "$(pwd)/service.yml:/usr/src/gem/service.yml:ro" -it ezcater-production.jfrog.io/ezk-gem ezk'
 alias k='kubectl'
+alias r='bundle exec rails'
+alias rg='bundle exec rails generate'
+alias rc='bundle exec rails console'
 
 
 # Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
@@ -151,3 +160,10 @@ export PATH="/snap/bin:$PATH"
 export PATH="/home/smibrd/local/anaconda2/bin:$PATH"
 
 [ -f ~/.bashrc-local-post ] && source ~/.bashrc-local-post
+
+# Make thinkpad touchpad only do left-click
+# https://unix.stackexchange.com/questions/438725/disabling-middle-click-on-bottom-of-a-clickpad-touchpad#438800
+TOUCHPAD_ID=$(which xinput &>/dev/null && xinput | grep -o 'Elan Touchpad[[:space:]*id=[0-9]\+' | cut -d= -f2)
+if [ -n "$TOUCHPAD_ID" ] ; then
+    xinput set-button-map 13 1 1 1 4 5 6 7 8 9 10 11 12
+fi
