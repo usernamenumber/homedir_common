@@ -1,3 +1,8 @@
+
+"
+" TO RELOAD AFTER CHANGES:  `:source %` or `:so %`
+"
+
 " $ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set mouse=a
 set paste
