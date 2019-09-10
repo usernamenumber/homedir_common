@@ -195,3 +195,10 @@ vmap <C-x> "+c
 vmap <C-v> c<ESC>"+p
 imap <C-v> <C-r><C-o>+
 
+
+" Ctrl+PgUp/Dn to switch tabs
+" https://stackoverflow.com/a/35930788
+nnoremap [5;5~ :tabprevious<Enter>
+nnoremap [6;5~ :tabnext<Enter>
+"nnoremap <C-PageUp> :tabprevious
+"nnoremap <C-PageDown> :tabnext
