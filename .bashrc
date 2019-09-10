@@ -146,10 +146,14 @@ alias k='kubectl'
 alias r='bundle exec rails'
 alias rg='bundle exec rails generate'
 alias rc='bundle exec rails console'
+alias b='bundle'
+alias be='bundle exec'
+alias bi='bundle install'
+alias br='bundle exec rake'
 
 
 # Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
-xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+[ -n "$DISPLAY" ] && xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 
 # Local PATH extensions
 export PATH="$HOME/bin:$PATH"
