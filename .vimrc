@@ -5,7 +5,7 @@
 
 " $ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 set mouse=a
-set paste
+"set paste
 set ai
 
 " https://www.youtube.com/watch?v=XA2WjJbmmoM
@@ -13,12 +13,22 @@ set wildmenu
 set path+=**
 command! MakeTags !ctags -R .
 
+" visible whitespace
+set listchars=tab:>-,space:·
+set list
+
+" auto-reload changes
+" http://vimdoc.sourceforge.net/htmldoc/options.html#'autoread'
+set autoread
+
 "vundle
 set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+
+Bundle 'vim-ruby/vim-ruby'
 
 Plugin 'VundleVim/Vundle.vim'
 "git interface
@@ -48,6 +58,12 @@ let b:syntastic_mode = "passive"
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+
+" matchit
+Plugin 'adelarsq/vim-matchit'
+
+" Ranger file manager integration
+Plugin 'francoiscabrol/ranger.vim'
 
 " 
 " requires nodejs, yarn
@@ -84,10 +100,14 @@ Plugin 'tpope/vim-vividchalk'
 call vundle#end()
 
 "map <Leader>o :TagbarToggle<CR>
-nmap <F8> :TagbarToggle<CR>
-map <Leader>o :TagbarToggle<CR>
+nmap <Leader>t :TagbarToggle<CR>
 
 map <Leader>n <plug>NERDTreeTabsToggle<CR>
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+let NERDTreeQuitOnOpen=3 "close tree after opening
+" This opens directories, too. :\
+" https://stackoverflow.com/questions/8680752/how-to-open-a-file-in-new-tab-by-default-in-nerdtree
+"let NERDTreeMapOpenInTab='<ENTER>' " open in tab by default
 
 filetype plugin indent on    " enables filetype detection
 let g:SimpylFold_docstring_preview = 1
@@ -102,8 +122,6 @@ map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 call togglebg#map("<F5>")
 colorscheme vividchalk
 set guifont=Monaco:h14
-
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
 "I don't like swap files
 "set noswapfile
@@ -179,20 +197,20 @@ nnoremap <C-H> <C-W><C-H>
 
 " (not) word wrapping
 :set wrap
-:set linebreak
-:set nolist  " list disables linebreak
+":set linebreak
+":set nolist  " list disables linebreak
 
 " CAPS to esc
 "au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 "au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
 
 " indentation and line wrapping defaults
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab
 set wrap
 set linebreak
-set nolist
+"set nolist
 
 " Normal copy/paste in gvim
 vmap <C-c> "+yi
@@ -207,3 +225,12 @@ nnoremap [5;5~ :tabprevious<Enter>
 nnoremap [6;5~ :tabnext<Enter>
 "nnoremap <C-PageUp> :tabprevious
 "nnoremap <C-PageDown> :tabnext
+
+
+
+"nnoremap <F5> :r !date<CR>
+map <Leader>t :r !date<CR>P
+"nnoremap <F5> "=strftime("%c")<CR>P
+"nnoremap <Leader>t "=strftime("%c")<CR>P
+
+

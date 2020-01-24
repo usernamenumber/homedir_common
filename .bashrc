@@ -111,47 +111,50 @@ fi
 
 set_prompt
 
-export LESS="-R"
+export LESS="-RX"
 export HISTSIZE=100000
 export HISTTIMEFORMAT="%F %T %s%t"
 # Enable history appending instead of overwriting.
 shopt -s histappend
 
-alias route="ip route"
-alias netstat="echo 'use \`ss\` you may need different options than '"
-alias c="code -r"
-alias cp="cp -i"                          # confirm before overwriting something
-alias df='df -h'                          # human-readable sizes
-alias b='bundle'
-alias be='bundle exec'
-alias br='bundle exec rake'
-alias brr='bundle exec rake route'
-alias free='free -h'
-alias more=less
-alias v=vim
-alias g=git
-alias d=docker
-alias y=yarn
-alias yi='yarn install'
-alias yr='yarn run'
-alias yrs='yarn run start'
-alias kcp='kubectl --context=production'
-alias kcs='kubectl --context=staging'
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -selection clipboard -o'
-alias vpp='vpn prod'
-alias vps='vpn staging'
-alias ezk='docker run --rm -v "$HOME/.aws:/root/.aws:ro" -v "$HOME/.kube:/root/.kube" -v "$(pwd)/service.yml:/usr/src/gem/service.yml:ro" -it ezcater-production.jfrog.io/ezk-gem ezk'
-alias k='kubectl'
-alias r='bundle exec rails'
-alias rg='bundle exec rails generate'
-alias rc='bundle exec rails console'
 alias b='bundle'
 alias be='bundle exec'
 alias bi='bundle install'
 alias br='bundle exec rake'
-
-
+alias brr='bundle exec rake route'
+alias c="code -r"
+alias cp="cp -i"                          # confirm before overwriting something
+alias d=docker
+alias df='df -h'                          # human-readable sizes
+alias dr='docker/run'
+alias drbe='docker/run bundle exec'
+alias drbr='docker/run bundle exec rake'
+alias drc='docker/run rails c'
+alias free='free -h'
+alias g=git
+alias grep='grep --color'
+alias k='kubectl'
+alias kcp='kubectl --context=production'
+alias kcs='kubectl --context=staging'
+alias ls='ls --color'
+alias more=less
+alias netstat="echo 'use \`ss\` you may need different options than '"
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
+alias r='bundle exec rails'
+alias rc='bundle exec rails console'
+alias rg='bundle exec rails generate'
+alias route="ip route"
+alias t='./docker/run bundle exec rspec'
+alias t=twilio
+alias tw=twilio
+alias v=vim
+alias vpp='vpn prod'
+alias vps='vpn staging'
+alias y=yarn
+alias yi='yarn install'
+alias yr='yarn run'
+alias yrs='yarn run start'
 # Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
 [ -n "$DISPLAY" ] && xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 
@@ -167,7 +170,17 @@ export PATH="/home/smibrd/local/anaconda2/bin:$PATH"
 
 # Make thinkpad touchpad only do left-click
 # https://unix.stackexchange.com/questions/438725/disabling-middle-click-on-bottom-of-a-clickpad-touchpad#438800
-TOUCHPAD_ID=$(which xinput &>/dev/null && xinput | grep -o 'Elan Touchpad[[:space:]*id=[0-9]\+' | cut -d= -f2)
-if [ -n "$TOUCHPAD_ID" ] ; then
-    xinput set-button-map 13 1 1 1 4 5 6 7 8 9 10 11 12
-fi
+#TOUCHPAD_ID=$(which xinput &>/dev/null && xinput | grep -o 'Elan Touchpad[[:space:]*id=[0-9]\+' | cut -d= -f2)
+#if [ -n "$TOUCHPAD_ID" ] ; then
+#    xinput set-button-map 13 1 1 1 4 5 6 7 8 9 10 11 12
+#fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Defaults for docker postgres
+export POSTGRES_USER=postgres
+export POSTGRES_PASSWORD=postgres
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
