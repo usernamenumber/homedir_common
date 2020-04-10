@@ -1,0 +1,5 @@
+[user]
+	name = Brad Smith
+	email = usernamenumber@gmail.com
+[pull]
+	rebase = true
