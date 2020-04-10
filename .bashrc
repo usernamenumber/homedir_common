@@ -141,6 +141,7 @@ alias more=less
 alias netstat="echo 'use \`ss\` you may need different options than '"
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
+alias ezk='docker run --rm -v "$HOME/.aws:/root/.aws:ro" -v "$HOME/.kube:/root/.kube" -v "$(pwd)/service.yml:/usr/src/gem/service.yml:ro" -it ezcater-production.jfrog.io/ezk-gem ezk'
 alias r='bundle exec rails'
 alias rc='bundle exec rails console'
 alias rg='bundle exec rails generate'
@@ -148,7 +149,7 @@ alias route="ip route"
 alias t='./docker/run bundle exec rspec'
 alias t=twilio
 alias tw=twilio
-alias v=vim
+alias v='vim -p'
 alias vpp='vpn prod'
 alias vps='vpn staging'
 alias y=yarn
@@ -184,3 +185,5 @@ export POSTGRES_USER=postgres
 export POSTGRES_PASSWORD=postgres
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
