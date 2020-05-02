@@ -112,6 +112,7 @@ fi
 set_prompt
 
 export LESS="-RX"
+export EDITOR="vim"
 export HISTSIZE=100000
 export HISTTIMEFORMAT="%F %T %s%t"
 # Enable history appending instead of overwriting.
@@ -187,3 +188,15 @@ export POSTGRES_PASSWORD=postgres
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# added by Pew
+source "$(pew shell_config)"
+
+# Ubuntu tab completion
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
