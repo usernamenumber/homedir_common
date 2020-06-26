@@ -38,20 +38,32 @@ function git_branch() {
      [ -n "$BRANCH" ] && echo "$BRANCH"
 }
 
+function xmodmap() {
+    xm=$(which xmodmap 2>/dev/null)
+    [ -n "$xm" ] && $xm $@ || true
+}
+
 if [ "$(uname)" == "Linux" ]; then
     export PROMPT_COMMAND="xmodmap &>/dev/null || source /usr/bin/byobu-reconnect-sockets; $PROMPT_COMMAND"
 fi
 [ -z "$DATE_COLOR" ] && DATE_COLOR=$WHITE
 [ -z "$HOST_COLOR" ] && HOST_COLOR=$LIGHT_GRAY
 [ -z "$PATH_COLOR" ] && PATH_COLOR=$LIGHT_BLUE
-[ -z "$PROMPT_COLOR" ] && PROMPT_COLOR=$YELLOW
-export PS1="\n${PROMPT_COLOR}-- ${HOST_COLOR}\u@\h ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s} ${PROMPT_COLOR}in ${PATH_COLOR}\w$(git_branch)\n${PROMPT_COLOR}$ ${NC}"
+[ -z "$PROMPT_COLOR" ] && PROMPT_COLOR=$PURPLE
+
+## Including colors in prompt in OSX leaves weird artifacts when using history :\
+if [ "$(uname)" == "Darwin" ] ; then
+    PS1='\n-- \u@\h at \D{%s} in \w$(git_branch)\n$ '
+else
+    PS1='\n${PROMPT_COLOR}-- ${HOST_COLOR}\u@\h ${PROMPT_COLOR}at ${DATE_COLOR}\D{%s} ${PROMPT_COLOR}in ${PATH_COLOR}\w$(git_branch)\n${PROMPT_COLOR}$ ${NC}'
+fi
 
 # User specific aliases and functions
 export LESS="-R"
 export HISTSIZE=100000
 export HISTTIMEFORMAT="%F %T %s%t"
 alias v='vim'
+alias g='git'
 
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
@@ -64,3 +76,6 @@ xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 
 # added by Anaconda2 4.4.0 installer
 export PATH="/home/smibrd/local/anaconda2/bin:$PATH"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
