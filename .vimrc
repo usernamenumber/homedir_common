@@ -50,7 +50,7 @@ Plugin 'klen/rope-vim'
 "Plugin 'davidhalter/jedi-vim'
 Plugin 'ervandew/supertab'
 ""code folding
-Plugin 'tmhedberg/SimpylFold'
+"Plugin 'tmhedberg/SimpylFold'
 
 "object browsing
 Plugin 'majutsushi/tagbar'
