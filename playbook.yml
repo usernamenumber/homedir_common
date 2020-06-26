@@ -1,0 +1,195 @@
+- hosts: all
+  vars:
+    user_name: "brad"
+    user_pw:   "vagrant"
+    virtualbox: true
+  become: true
+  tasks:
+    - name: Encrypt Password
+      shell: echo {{ user_pw }} | mkpasswd --method=sha-512 -S foosalt0 -s
+      register: enc
+
+    - name: Apt Packages
+      apt:
+        name: "{{ apt_packages }}"
+        state: latest
+        update_cache: true
+      vars:
+        apt_packages:
+          - python3
+          - python3-pip
+          - byobu
+          - i3
+          - rofi
+          - lightdm
+          - libnotify-bin
+          - gnome-terminal
+          - x11-xserver-utils
+          - virtualbox-guest-additions-iso
+          - xinit
+          - checkinstall
+          - autoconf
+          - firefox
+          - chromium-browser
+          - pasystray
+          - xclip
+          - youtube-dl
+
+    - name: Pip packages
+      pip: 
+        name: ['jupyter', 'pandas',
+'xlrd']
+        executable: pip3
+
+    - name: Install apt-repo
+      pip:
+        name: apt-repo
+        executable: pip3
+
+    - name: Enable GUI
+      command: /vagrant/bin/enable_gui.sh
+      
+    - name: Set up User
+      user: 
+        name: "{{ user_name }}"
+        password: "{{ enc.stdout }}"
+        update_password: "on_create"
+        groups: 
+          - sudo
+
+    - name: Set up passwordless sudo (for vagrant ssh)
+      lineinfile: 
+        path: /etc/sudoers
+        state: present
+        regexp: "^{{ user_name }}"
+        line: "{{ user_name }} ALL=(ALL) NOPASSWD: ALL"
+        validate: "visudo -cf %s"
+
+    - name: Install Slack
+      snap: 
+        name: slack
+        classic: true
+
+    - name: Install Spotify
+      snap: 
+        name: spotify
+
+    - name: Install VSCode
+      snap: 
+        name: code
+        classic: true
+
+    - name: Install Discord
+      snap:
+        name: discord
+
+    # TODO: i3 update repo
+    # 
+
+    - name: Install snap core
+      snap: 
+        name: core
+
+    - name: Install juju / charm
+      snap:
+        name: "{{item}}"
+        classic: True
+      with_items:
+        - juju
+        - charm
+
+
+- hosts: all
+  vars:
+    user_name: "brad"
+    user_pw:   "vagrant"
+    home:      "/home/{{ user_name }}"
+    virtualbox: true
+  become: true
+  become_user: "{{ user_name }}"
+  tasks:
+    - name: SSH Setup
+      copy:
+        src: "skel/.ssh"
+        dest: "/home/{{ user_name }}"
+        mode: "preserve"
+        force: "no"
+
+    - name: Thoughtbot dotfiles
+      become: true
+      git:
+        repo: git@github.com:thoughtbot/dotfiles.git
+        dest: "{{ home }}/dotfiles" 
+        key_file: "{{ home }}/.ssh/github"
+
+#    - name: RCM repo
+#      apt_repo:
+#        repo: ppa:martin-frost/thoughtbot-rcm
+#        state: present
+#        update: true
+
+    - name: Personal dotfiles
+      git:
+        repo: git@github.com:usernamenumber/homedir_common.git
+        dest: "{{ home }}/homedir_common" 
+        key_file: "{{ home }}/.ssh/github"
+
+    - name: Symlink dotfiles-local
+      file:
+        src: "{{ home }}/homedir_common/dotfiles-local"
+        dest: "{{ home }}/dotfiles-local"
+        state: link
+
+    - name: Thoughtbot dotfiles
+      git:
+        repo: git@github.com:thoughtbot/dotfiles.git
+        dest: "{{ home }}/dotfiles" 
+
+    - name: .common dotfiles
+      file:
+        src: "{{ home }}/homedir_common/{{ item }}"
+        dest: "{{ home }}/.config/{{ item }}"
+        state: link
+      with_items:
+        - "i3"
+        - "i3status"
+        - "dunst"
+      
+    - name: Personal scripts from git
+      git:
+        repo: git@github.com:usernamenumber/sysadmisc.git
+        dest: "{{ home }}/sysadmisc" 
+        key_file: "{{ home }}/.ssh/github"
+
+    - name: Set up personal bin
+      file: 
+        path: "{{ home }}/bin"
+        state: directory
+
+    - name: Get personal scripts list
+      find:
+        paths:
+          - "{{ home }}/sysadmisc"
+        exclude:
+          - "README.md"
+      register: sysadmisc
+
+    - name: Populate personal bin
+      file:
+        src: "{{ item.path }}"
+        dest: "{{ home }}/bin/{{ item.path | basename }}"
+        state: link
+      with_items: "{{ sysadmisc.files }}"
+
+    - name: Install Joplin
+      shell:  
+        cmd: wget -O - https://raw.githubusercontent.com/laurent22/joplin/master/Joplin_install_and_update.sh | bash
+        creates: "/usr/bin/joplin"
+
+    - name: Symlink Joplin
+      file:
+        src: "{{ home }}/.joplin/Joplin.AppImage"
+        dest: "{{ home }}/bin/joplin"
+        state: link
+
+
