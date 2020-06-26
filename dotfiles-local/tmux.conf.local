@@ -1,0 +1,5 @@
+set-option -g pane-active-border-style "fg=red"
+set-option -g window-status-current-style "bright fg=brightgreen"
+set-option -g window-status-bell-style "bright"
+set-option -g window-status-activity-style "bright"
+set-option -g status-left '#{client_session} - '

@@ -1,0 +1,46 @@
+set colorcolumn=""
+set mouse=a
+
+Plug 'preservim/nerdcommenter'
+"leader + c + Space t toggle comment
+
+Plug 'preservim/nerdtree'
+nnoremap <Leader>n :NERDTreeToggle<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+Plug 'morhetz/gruvbox'
+let g:gruvbox_italic=1
+colorscheme gruvbox
+set background=dark
+
+Plug 'thoughtbot/vim-rspec'
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
+let g:rspec_command = "!docker/run bundle exec rspec {spec}"
+
+" In quickfix, favor existing tabs,
+" otherwise open in new tab, not existing
+:set switchbuf+=usetab,newtab
+
+" https://unix.stackexchange.com/questions/60189/how-to-search-the-current-word-in-all-opened-tabs-in-vim
+command! -nargs=1 Search call setqflist([]) | silent execute "bufdo grepadd! '<args>' %" | redraw!
+nnoremap <left>  :cprev<cr>zvzz
+nnoremap <right> :cnext<cr>zvzz
+
+" hilight all matches
+set hlsearch
+
+" Ctrl+PgUp/Dn to switch tabs
+" " https://stackoverflow.com/a/35930788
+ nnoremap [5;5~ :tabprevious<Enter>
+ nnoremap [6;5~ :tabnext<Enter>
+" "nnoremap <C-PageUp> :tabprevious
+" "nnoremap <C-PageDown> :tabnext
+
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
