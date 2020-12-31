@@ -88,7 +88,7 @@ set_prompt() {
 	PROMPT_LEN=$[ 22 + $(len $USER) + $(len $HOSTNAME) + $(len $DIR) + $(len $BRANCH)]
     PS1="\n${PROMPT_COLOR}["
 	# Omit this stuff for small windows like tmux splits
-	if [ "$COLUMNS" -ge "$PROMPT_LEN" ] ; then
+	if [ -n "$COLUMNS" -a "$COLUMNS" -ge "$PROMPT_LEN" ] ; then
 		PS1="${PS1} ${USER_PART}"
 		PS1="${PS1} at ${DATE_PART}"
 		PS1="${PS1} in"
