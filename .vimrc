@@ -1,231 +1,218 @@
+set nocompatible " be iMproved, required
+filetype off     " required
 
-"
-" TO RELOAD AFTER CHANGES:  `:source %` or `:so %`
-"
+" Keep Plug commands between plug#begin() and plug#end().
+call plug#begin()
 
-" $ git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+Plug 'janko/vim-test'             " Run Ruby and Elixir tests
+Plug 'nikolalsvk/vim-rails'       " Rails plugin
+
+Plug 'airblade/vim-gitgutter'     " Show git diff of lines edited
+Plug 'tpope/vim-fugitive'         " :Gblame
+Plug 'tpope/vim-rhubarb'          " :GBrowse
+
+Plug 'tpope/vim-endwise'          " Autocomplete end after a do
+Plug 'mileszs/ack.vim'            " Use ack in Vim
+
+Plug 'pangloss/vim-javascript'    " JavaScript support
+Plug 'leafgarland/typescript-vim' " TypeScript syntax
+Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
+Plug 'jparise/vim-graphql'        " GraphQL syntax
+Plug 'styled-components/vim-styled-components'
+
+Plug 'vim-airline/vim-airline'    " Vim powerline
+
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'           " Set up fzf and fzf.vim
+
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
+Plug 'psliwka/vim-smoothie'       " Smooth scrolling
+
+" All of your Plugins must be added before the following line
+call plug#end()              " required
+filetype plugin indent on    " required
+
+" Leader key is SPACE, I find it the best
+let mapleader = " "
+
+" Look and Feel settings
+syntax enable
+set background=dark
+set wildmenu " when opening a file with e.g. :e ~/.vim<TAB> there is a graphical menu of all the matches
+set ttyfast
+set lazyredraw
+set updatetime=300
+set hidden " Open other files if current one is not saved
+
+" Enable Mouse mode in all modes
 set mouse=a
-"set paste
-set ai
 
-" https://www.youtube.com/watch?v=XA2WjJbmmoM
-set wildmenu
-set path+=**
-command! MakeTags !ctags -R .
+" Numbers
+set number
+set numberwidth=4
+set ruler
 
-" visible whitespace
-set listchars=tab:>-,space:·
-set list
+" paste mode
+nnoremap <F5> :set invpaste paste?<CR>
+set pastetoggle=<F5>
+set showmode
 
-" auto-reload changes
-" http://vimdoc.sourceforge.net/htmldoc/options.html#'autoread'
-set autoread
+" Treat long lines as break lines
+map j gj
+map k gk
 
-"vundle
-set nocompatible
-filetype off
+" Indentation
+set autoindent
+set cindent
+set smartindent
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" Folding
+" Enable folding
+set foldmethod=syntax
+set foldlevel=99
 
-Bundle 'vim-ruby/vim-ruby'
+" Enable folding with the z key
+nmap z za
 
-Plugin 'VundleVim/Vundle.vim'
-"git interface
-Plugin 'tpope/vim-fugitive'
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-set laststatus=2
-"filesystem
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'kien/ctrlp.vim' 
+" Disable all bells and whistles
+set noerrorbells visualbell t_vb=
 
-"html
-Plugin 'isnowfy/python-vim-instant-markdown'
-Plugin 'jtratner/vim-flavored-markdown'
-Plugin 'suan/vim-instant-markdown'
-Plugin 'nelstrom/vim-markdown-preview'
-"python sytax checker
-Plugin 'nvie/vim-flake8'
-Plugin 'vim-scripts/Pydiction'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'scrooloose/syntastic'
-let g:syntastic_check_on_open=1
-let g:syntastic_python_checkers=['flake8','pylint']
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let b:syntastic_mode = "passive"
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" Ack tricks
+let g:ackprg = 'rg --vimgrep --smart-case --hidden'
+" Any empty ack search will search for the work the cursor is on
+let g:ack_use_cword_for_empty_search = 1
+nmap <leader>a :Ack!<Space>
+nmap <leader>A :Ack! <cword><CR>
 
-" matchit
-Plugin 'adelarsq/vim-matchit'
+" Tab Options
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2 " Number of spaces a tab counts when editing
+set expandtab
 
-" Ranger file manager integration
-Plugin 'francoiscabrol/ranger.vim'
+" Delete empty space from the end of lines on every save
+autocmd BufWritePre * :%s/\s\+$//e
 
-" 
-" requires nodejs, yarn
-call plug#begin('~/.vim/plugged')
-"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
-"Plug 'neoclide/coc-solargraph', {'do': 'yarn install --frozen-lockfile'}
-"Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-"Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-
-"auto-completion stuff
-"Plugin 'klen/python-mode'
-"Plugin 'davidhalter/jedi-vim'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'klen/rope-vim'
-"Plugin 'davidhalter/jedi-vim'
-Plugin 'ervandew/supertab'
-
-""code folding
-"Plugin 'tmhedberg/SimpylFold'
-
-"object browsing
-Plugin 'majutsushi/tagbar'
-
-"Colors!!!
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'jnurmine/Zenburn'
-Plugin 'tpope/vim-vividchalk'
-
-call vundle#end()
-
-"map <Leader>o :TagbarToggle<CR>
-nmap <Leader>t :TagbarToggle<CR>
-
-map <Leader>n <plug>NERDTreeTabsToggle<CR>
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-let NERDTreeQuitOnOpen=3 "close tree after opening
-" This opens directories, too. :\
-" https://stackoverflow.com/questions/8680752/how-to-open-a-file-in-new-tab-by-default-in-nerdtree
-"let NERDTreeMapOpenInTab='<ENTER>' " open in tab by default
-
-filetype plugin indent on    " enables filetype detection
-let g:SimpylFold_docstring_preview = 1
-
-"autocomplete
-let g:ycm_autoclose_preview_window_after_completion=1
-
-"custom keys
-let mapleader=" "
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-"
-call togglebg#map("<F5>")
-colorscheme vividchalk
-set guifont=Monaco:h14
-
-"I don't like swap files
-"set noswapfile
-
-"turn on numbering
-set nu
-
-"python with virtualenv support
-"py << EOF
-"import os.path
-"import sys
-"import vim
-"if 'VIRTUA_ENV' in os.environ:
-"  project_base_dir = os.environ['VIRTUAL_ENV']
-"  sys.path.insert(0, project_base_dir)
-"  activate_this = os.path.join(project_base_dir,'bin/activate_this.py')
-"  execfile(activate_this, dict(__file__=activate_this))
-"EOF
-
-"it would be nice to set tag files by the active virtualenv here
-":set tags=~/mytags "tags for ctags and taglist
-"omnicomplete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-
-"------------Start Python PEP 8 stuff----------------
-" Number of spaces that a pre-existing tab is equal to.
-au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
-au BufRead,BufNewFile *md set tabstop=2
-
-"spaces for indents
-au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
-au BufRead,BufNewFile *.py,*.pyw set expandtab
-au BufRead,BufNewFile *.py set softtabstop=4
-
-" Use the below highlight group when displaying bad whitespace is desired.
-highlight BadWhitespace ctermbg=red guibg=red
-
-" Display tabs at the beginning of a line in Python mode as bad.
-au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
-" Make trailing whitespace be flagged as bad.
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-" Wrap text after a certain number of characters
-au BufRead,BufNewFile *.py,*.pyw, set textwidth=100
-
-" Use UNIX (\n) line endings.
-au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
-
-" Set the default file encoding to UTF-8:
+" Set default encoding to utf-8
 set encoding=utf-8
+set termencoding=utf-8
 
-" For full syntax highlighting:
-let python_highlight_all=1
-syntax on
+" Disable backups and swap files
+set nobackup
+set nowritebackup
+set noswapfile
 
-" Keep indentation level from previous line:
-autocmd FileType python set autoindent
+set ignorecase " Ignore case when searching
+set smartcase  " When searching try to be smart about cases
+set nohlsearch " Don't highlight search term
+set incsearch  " Jumping search
 
-" make backspaces more powerfull
+" Always show the status line
+set laststatus=2
+
+" Allow copy and paste from system clipboard
+set clipboard=unnamed
+
+" Spellcheck for features and markdown
+au BufRead,BufNewFile *.md setlocal spell
+au BufRead,BufNewFile *.md.erb setlocal spell
+au BufRead,BufNewFile *.feature setlocal spell
+
+" Delete characters outside of insert area
 set backspace=indent,eol,start
 
+" +++ Shortcuts +++
+" Open Buffer
+nnoremap <silent><leader>l :Buffers<CR>
+" Open test file for a current file
+nnoremap <silent><leader>s :A<CR>
+" Open test file for a current file in a vertical window
+nnoremap <silent><leader>v :AV<CR>
+" Vertically split screen
+nnoremap <silent><leader>\ :vs<CR>
+" Split screen
+nnoremap <silent><leader>/ :split<CR>
 
-"----------Stop python PEP 8 stuff--------------
+" Faster saving and exiting
+nnoremap <silent><leader>w :w!<CR>
+nnoremap <silent><leader>q :q!<CR>
+nnoremap <silent><leader>x :x<CR>
+" Open Vim configuration file for editing
+nnoremap <silent><leader>2 :e ~/.vimrc<CR>
+" Source Vim configuration file and install plugins
+nnoremap <silent><leader>1 :source ~/.vimrc \| :PlugInstall<CR>
 
-"js stuff"
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+" Toggle relative line numbers
+nnoremap <leader>rn :set relativenumber!<cr>
 
-"split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+" If fzf installed using git
+set rtp+=~/.fzf
+" Map fzf search to CTRL P
+nnoremap <C-p> :GFiles<Cr>
+" Map fzf + ag search to CTRL P
+nnoremap <C-g> :Rg <Cr>
 
-" (not) word wrapping
-:set wrap
-":set linebreak
-":set nolist  " list disables linebreak
+" vim-test shortcut for running tests
+nnoremap <silent><leader>; :TestNearest<CR>
+nnoremap <silent><leader>' :TestFile<CR>
 
-" CAPS to esc
-"au VimEnter * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
-"au VimLeave * !xmodmap -e 'clear Lock' -e 'keycode 0x42 = Caps_Lock'
+" Extra <CR> is for disabling /"Press ENTER or type command to continue/"
+nnoremap <silent><leader>e :Exp<CR><CR>
 
-" indentation and line wrapping defaults
-set tabstop=2
-set shiftwidth=2
-set expandtab
-set wrap
-set linebreak
-"set nolist
+" Easier movement between split windows CTRL + {h, j, k, l}
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
 
-" Normal copy/paste in gvim
-vmap <C-c> "+yi
-vmap <C-x> "+c
-vmap <C-v> c<ESC>"+p
-imap <C-v> <C-r><C-o>+
+" CoC extensions
+let g:coc_global_extensions = ['coc-solargraph', 'coc-tsserver', 'coc-json']
 
+" Add CoC Prettier if prettier is installed
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
 
-" Ctrl+PgUp/Dn to switch tabs
-" https://stackoverflow.com/a/35930788
-nnoremap [5;5~ :tabprevious<Enter>
-nnoremap [6;5~ :tabnext<Enter>
-"nnoremap <C-PageUp> :tabprevious
-"nnoremap <C-PageDown> :tabnext
+" Add CoC ESLint if ESLint is installed
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
 
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>c  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
 
-"nnoremap <F5> :r !date<CR>
-map <Leader>t :r !date<CR>P
-"nnoremap <F5> "=strftime("%c")<CR>P
-"nnoremap <Leader>t "=strftime("%c")<CR>P
+" Format
+nmap <leader>f   :CocCommand prettier.formatFile<CR>
 
+" Fix some weird error with Fugitive
+let g:fugitive_pty = 0
 
+" Change cursor to solid vertical line
+" There are problems with Vim's floating window setting cursor to a solid
+" block. So these lines below are resetting it to a solid vertical line.
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[6 q"
+
+" Optionally reset the cursor on start:
+augroup myCmds
+au!
+autocmd VimEnter * silent !echo -ne "\e[6 q"
+augroup END
+
+" Fix syntax highlight for Coc plugin floating errors
+hi CocErrorFloat guifg=Magenta guibg=Magenta
+
+" Use templates https://vimtricks.com/p/automated-file-templates/
+autocmd BufNewFile *.test.tsx        0r ~/Documents/dotfiles/skeletons/react-typescript.test.tsx
+autocmd BufNewFile *\(test\)\@<!.tsx 0r ~/Documents/dotfiles/skeletons/react-typescript.tsx
+autocmd BufNewFile *content/blog*.md 0r ~/Documents/dotfiles/skeletons/blog-post.md
+autocmd BufNewFile *.sh              0r ~/Documents/dotfiles/skeletons/script.sh
+autocmd BufNewFile *.html            0r ~/Documents/dotfiles/skeletons/page.html
