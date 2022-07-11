@@ -28,20 +28,20 @@ LIGHT_CYAN='\[\033[1;36m\]'
 WHITE='\[\033[1;37m\]'
 
 start_ssh_agent() {
-    # SSH Agent
-    # https://yashagarwal.in/posts/2017/12/setting-up-ssh-agent-in-i3/
-    if [ -f ~/.ssh/agent.env ] ; then
-        . ~/.ssh/agent.env > /dev/null
-        if ! kill -0 $SSH_AGENT_PID > /dev/null 2>&1; then
-            echo "Stale agent file found. Spawning new agent… "
-            eval `ssh-agent | tee ~/.ssh/agent.env`
-            ssh-add
-        fi
-    else
-        echo "Starting ssh-agent"
-        eval `ssh-agent | tee ~/.ssh/agent.env`
-        ssh-add
-    fi
+  # Based on 
+  # https://yashagarwal.in/posts/2017/12/setting-up-ssh-agent-in-i3/
+  if [ -f ~/.ssh/agent.env ] ; then
+      . ~/.ssh/agent.env > /dev/null
+      if [ "$(ps --pid $SSH_AGENT_PID -ho comm)" != 'ssh-agent' ]; then 
+          echo "Stale agent file found. Spawning new agent… "
+          eval `ssh-agent | tee ~/.ssh/agent.env`
+          ssh-add
+      fi
+  else
+      echo "Starting ssh-agent"
+      eval `ssh-agent | tee ~/.ssh/agent.env`
+      ssh-add
+  fi
 }
 
 git_branch() {
@@ -70,7 +70,11 @@ set_prompt() {
 	USER_PART="${HOST_COLOR}\u@\h${PROMPT_COLOR}"
 	DATE_PART="${DATE_COLOR}\D{%s}${PROMPT_COLOR}"
 
-	DIR="$($HOME/.local/repos/sysadmisc/shorten_path.py)"
+  if ${HOME}/bin/shorten_path.py &>/dev/null ; then 
+    DIR="$($HOME/bin/shorten_path.py)"
+  else
+    DIR='\w'
+  fi
     DIR_PART=" ${PATH_COLOR}${DIR}${PROMPT_COLOR}"
 	BRANCH=$(git_branch)
 	case "$BRANCH" in  
@@ -147,6 +151,9 @@ alias drbr='docker/run bundle exec rake'
 alias drc='docker/run rails c'
 alias free='free -h'
 alias g=git
+alias gs='git status'
+alias gd='git diff'
+alias gc='git commit'
 alias grep='grep --color'
 alias k='kubectl'
 alias kcp='kubectl --context=production'
@@ -172,7 +179,7 @@ alias yi='yarn install'
 alias yr='yarn run'
 alias yrs='yarn run start'
 # Map Caps Lock to ESC (set back to "Caps_Lock" to undo)
-[ -n "$DISPLAY" ] && xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
+#[ -n "$DISPLAY" ] && xmodmap -e 'clear Lock' -e 'keycode 0x42 = Escape'
 
 # Local PATH extensions
 export PATH="$HOME/bin:$PATH"
@@ -206,8 +213,10 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-# added by Pew
-source "$(pew shell_config)"
+if which pew &>/dev/null ; then
+  # added by Pew
+  source "$(pew shell_config)"
+fi
 
 # Ubuntu tab completion
 if ! shopt -oq posix; then
@@ -217,3 +226,5 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+export EDITOR=vim

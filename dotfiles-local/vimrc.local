@@ -1,16 +1,19 @@
 set colorcolumn=""
 set mouse=a
 
+filetype plugin on
 Plug 'preservim/nerdcommenter'
 "leader + c + Space t toggle comment
+nnoremap <C-/> NERDCommenterToggle
 
 Plug 'preservim/nerdtree'
 nnoremap <Leader>n :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-Plug 'morhetz/gruvbox'
-let g:gruvbox_italic=1
-colorscheme gruvbox
+
+"Plug 'morhetz/gruvbox'
+"let g:gruvbox_italic=1
+"colorscheme gruvbox
 set background=dark
 
 Plug 'thoughtbot/vim-rspec'
