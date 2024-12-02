@@ -30,4 +30,5 @@
   #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar {
     min-width: 260px !important;
     max-width: 260px !important;
+    z-index: 3;
   }
